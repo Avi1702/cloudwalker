@@ -1,9 +1,11 @@
 import React from 'react'
 import axios from 'axios'
 import "../Styles/Home.css"
+import { valueToPercent } from '@mui/base'
 
 export const Home = () => {
 
+    // mantaining a Object state to handle input datas
     const [formData,setFormData]=React.useState({
 
         user:"",
@@ -18,51 +20,72 @@ export const Home = () => {
         
     })
 
-    // const [pinData,setPinData]=React.useState([])
+    // Saving data using Zip code API
+    const [pinData,setPinData]=React.useState([])
 
 
+    // To handle input values on type
     const setInput=(e)=>{
-       let {name,value}=e.target
+       let {name,value,checked}=e.target
        
         if(name==="products" || name==="hobbies"){
-          setFormData({...formData,[name]:[...formData[name],value]})
+
+           if(checked){ 
+            setFormData({...formData,[name]:[...formData[name],value]}) 
+           }
+           else{
+            let indx=formData.products.indexOf(value)
+              formData.products.splice(indx,1)
+           }
       
          }
-        // else if(name==="Postal_code" && value.length>=6){
-
+        else if(name==="Postal_code" && value.length>=6){
+   
+                 axios.get(`https://app.zipcodebase.com/api/v1/search?apikey=af9809c0-8cc6-11ed-9ebd-019d4cf2b4a6&codes=${value}`)
+                .then((res)=>{ setPinData(res.data.results[value])})
+                .catch((err)=>{alert(err)})
         
-        //         setFormData({...formData,[name]:value})
-                
-        //          axios.get(`https://app.zipcodebase.com/api/v1/search?apikey=af9809c0-8cc6-11ed-9ebd-019d4cf2b4a6&codes=${value}`)
-        //         .then((res)=>{ setFormData({...formData,state:res.data.results[value][0].state})})
-        //         .catch((err)=>{alert(err)})
-        
-
-        //     // setFormData({...formData,state:pinData[0].state})
-        //     // setFormData({...formData,city:pinData[0].province})
-
-        // } 
+                 
+                setFormData({...formData,[name]:value,state:pinData[0].state,city:pinData[0].province})
+            
+        } 
         else{
           setFormData({...formData,[name]:value}) 
         }
     }
 
+    // sending the form data to DATABASE
     const sendData=(event)=>{
         event.preventDefault()
-        console.log(user,DOB,fullname,mother_name,products)
+        // console.log(user,DOB,fullname,mother_name,products)
+        axios({
+            method:"post",
+            url:"http://localhost:4000/details",
+            data:{
+                user,
+                DOB,
+                fullname,
+                mother_name,
+                Postal_code,
+                products,
+                hobbies,
+                state,
+                city
+            }
+        })
+        .then((res)=>{ alert("Details added Succesfully")})
+        .catch(err=>{console.log(err)})
+
+       
     }
 
-    // const postalCode=(e)=>{
-    //       setFormData({...formData,[name]:})
-
-    //       if(Pos)
-    // }
 
  let {user,DOB,fullname,mother_name,products,hobbies,state,city,Postal_code}=formData
 
   return (
-    <div>
-        <h2>Fill The Below Form</h2>
+    <div id='Home'>
+
+        {/* form to take input of user details */}
         <div id="form">
             <form>
                 <table>
@@ -111,24 +134,6 @@ export const Home = () => {
                               <input type={"text"} value={mother_name} id="mother_name" name="mother_name" onChange={setInput}></input>
                             </td>
                          </tr>
- 
-                        <tr>
-                            <td>
-                                Select Products
-                            </td>
-                            <td>:</td>
-                            <td>
-                               <select name="products" onChange={setInput}>
-                                <option>
-                                <input type="checkbox"></input>Car
-
-                                </option>
-                                {/* <option value="bike"><input type="checkbox" /><lable>Bike</lable></option> */}
-                                {/* <option value="bike">b</option>
-                                <option value="c">c</option> */}
-                               </select>
-                            </td>
-                        </tr>  
 
                         <tr>
                             <td for="postal_code">Pin Code</td>
@@ -148,45 +153,35 @@ export const Home = () => {
                             <td><input type={"text"} id="city" value={city}/></td>
                         </tr>
 
-                        {/* <tr>
+                         <tr>
                             <td>
-                                <label htmlFor="state">Select State</label>
+                                Select Products
                             </td>
                             <td>:</td>
-                            <td>
-                                <select id="state">
-                                    <option value="Andhra Pradesh">Andhra Pradesh	</option>
-                                    <option value="Arunachal Pradesh">Arunachal Pradesh	</option>
-                                    <option value="Assam">Assam</option>
-                                    <option value="Bihar">Bihar</option>
-                                    <option value="Chhattisgarh">Chhattisgarh</option>
-                                    <option value="Goa">Goa</option>
-                                    <option value="Gujarat">Gujarat</option>
-                                    <option value="Haryana">Haryana</option>
-                                    <option value="Himachal Pradesh">Himachal Pradesh</option>
-                                    <option value="Jharkhand">Jharkhand</option>
-                                    <option value="Karnataka">Karnataka</option>
-                                    <option value="Kerala">Kerala</option>
-                                    <option value="Madhya Pradesh">Madhya Pradesh</option>
-                                    <option value="Maharashtra">Maharashtra</option>
-                                    <option value="Manipur">Manipur</option>
-                                    <option value="Meghalaya">Meghalaya</option>
-                                    <option value="Mizoram">Mizoram</option>
-                                    <option value="Nagaland">Nagaland</option>
-                                    <option value="Odisha">Odisha</option>
-                                    <option value="Punjab">Punjab</option>
-                                    <option value="Rajasthan">Rajasthan</option>
-                                    <option value="Sikkim">Sikkim</option>
-                                    <option value="Tamil Nadu">Tamil Nadu</option>
-                                    <option value="Telangana">Telangana</option>
-                                    <option value="Tripura">Tripura</option>
-                                    <option value="Uttar Pradesh">Uttar Pradesh</option>
-                                    <option value="Uttarakhand">Uttarakhand</option>
-                                    <option value="West Bengal">West Bengal	</option>
-                            
-                                </select>
+                            <td style={{color:"red"}}>
+                                <pre><input type="checkbox" value="Car" name="products" onChange={setInput}></input>  <lable>Car</lable><br/></pre>
+                                <pre><input type="checkbox" value="Watch" name="products" onChange={setInput}></input>  <lable>Watch</lable><br/></pre>
+                                <pre><input type="checkbox" value="Laptop" name="products" onChange={setInput}></input>  <lable>Laptop</lable><br/></pre>
+                                <pre><input type="checkbox" value="Phone" name="products" onChange={setInput}></input>  <lable>Phone</lable></pre>
+
                             </td>
-                        </tr> */}
+                         </tr>
+
+                         
+                         <tr>
+                            <td>
+                                Hobbies
+                            </td>
+                            <td>:</td>
+                            <td style={{color:"purple"}}>
+                                <pre><input type="checkbox" value="Dancing" name="hobbies" onChange={setInput}></input>  <lable>Dancing</lable><br/></pre>
+                                <pre><input type="checkbox" value="Singing" name="hobbies" onChange={setInput}></input>  <lable>Singing</lable><br/></pre>
+                                <pre><input type="checkbox" value="Reading" name="hobbies" onChange={setInput}></input>  <lable>Reading</lable><br/></pre>
+                                <pre><input type="checkbox" value="Cooking" name="hobbies" onChange={setInput}></input>  <lable>Cooking</lable></pre>
+                              
+                            </td>
+                         </tr>
+
                     </tbody>
 
                 </table>
