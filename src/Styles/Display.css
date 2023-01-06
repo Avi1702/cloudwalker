@@ -12,3 +12,7 @@
 .border{
     background-color: antiquewhite;
 }
+
+.border>th,tr,td{
+    border: 1px solid black;
+}

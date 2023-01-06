@@ -51,6 +51,8 @@ export const Display = () => {
 
     //To delete a particular data from table    
     const Delete=(id)=>{
+
+        console.log(id)
         axios.delete(`http://localhost:4000/delete/${id}`)
         .then((res)=>{alert("Deleted Successfully")})
         .catch((err)=>{alert(err)})
@@ -61,11 +63,12 @@ export const Display = () => {
 
     
     // To Edit a particular data from table
-    const updateData=(id)=>{
+    const updateData=()=>{
+  
        axios({
         method:"patch",
-        url:`http://localhost:4000/update/${id}`,
-        data:{_id,user,DOB,fullname,mother_name,Postal_code,products,state,city,hobbies}
+        url:`http://localhost:4000/update/${form.id}`,
+        data:{user,DOB,fullname,mother_name,Postal_code,products,state,city,hobbies}
       })
        .then((res)=>{
         alert("Data Updated Successfully")
@@ -77,6 +80,7 @@ export const Display = () => {
 
     // Function to open a Modal
      const handleOpen = (id) =>{
+      console.log(id)
             setOpen(true)
             axios.get(`http://localhost:4000/find/${id}`)
             .then((res)=>{
@@ -96,7 +100,7 @@ export const Display = () => {
          setForm({...form,[name]:value})
         }
 
-    let {_id,user,DOB,fullname,mother_name,Postal_code,products,state,city,hobbies}=form
+    let {user,DOB,fullname,mother_name,Postal_code,products,state,city,hobbies}=form
 
       
         
@@ -106,9 +110,10 @@ export const Display = () => {
     <div id='display'>
 
         {/* Displaying the data received data form MongoDB Data base */}
-        <table class="border" style={{border:"1px solid black"}}>
+        <table className="border" style={{border:"1px solid black"}}>
             <thead style={{border:"1px solid black"}}>
                 <tr>
+                  <th>Id</th>
                     <th>Full Name</th>
                     <th>Mother Name</th>
                     <th>State</th>
@@ -121,15 +126,16 @@ export const Display = () => {
             </thead>
             <tbody style={{border:"1px solid black"}}>
                 {
-                    data.map((ele)=>{return <tr >
+                    data.map((ele)=>{return <tr key={ele.id}>
+                      <td>{ele.id}</td>
                         <td>{ele.fullname}</td>
                         <td>{ele.mother_name}</td>
                         <td>{ele.state}</td>
                         <td>{ele.city}</td>
                         <td>{ele.products.map((e)=>{return <p>{e},</p>})}</td>
                         <td>{ele.hobbies.map((e)=>{return <p>{e},</p>})}</td>
-                        <td><button onClick={()=>{handleOpen(ele._id)}}>Update</button></td>
-                        <td><button onClick={()=>{Delete(ele._id)}}>Delete</button></td>
+                        <td><button onClick={()=>{handleOpen(ele.id)}}>Update</button></td>
+                        <td><button onClick={()=>{Delete(ele.id)}}>Delete</button></td>
 
                     </tr>})
                 }

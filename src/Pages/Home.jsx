@@ -74,7 +74,7 @@ export const Home = () => {
             }
         })
         .then((res)=>{ alert("Details added Succesfully")})
-        .catch(err=>{console.log(err)})
+        .catch(err=>{console.log(err.status)})
 
        
     }
