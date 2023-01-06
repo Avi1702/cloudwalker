@@ -12,7 +12,7 @@ Step-2 : To install all the dependencies
 Step-3 : To start forntend, run:
 ### `npm start`
 
-Step-4 : To run the Backend, you can use:
+Step-4 : To start the Backend, Move to the directory `./backend` and run:
 ### `node index.js`  ||  `nodemon index.js`
 
 Step-5 : Can Connect to your local MonogoDB Database using URL: 
