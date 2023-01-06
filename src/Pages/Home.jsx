@@ -57,7 +57,7 @@ export const Home = () => {
     // sending the form data to DATABASE
     const sendData=(event)=>{
         event.preventDefault()
-        // console.log(user,DOB,fullname,mother_name,products)
+    // console.log(user,DOB,fullname,mother_name,products)
         axios({
             method:"post",
             url:"http://localhost:4000/details",
