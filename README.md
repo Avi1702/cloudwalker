@@ -7,7 +7,7 @@ In the project directory, you can run:
 Step-1 : Clone the repository
 
 Step-2 : To install all the dependencies
-### `npm install' 
+### `npm install`
 
 Step-3 : To start forntend, run:
 ### `npm start`
