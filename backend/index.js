@@ -48,9 +48,7 @@ app.post("/details",async (req,res)=>{
     else{
          id=temp[temp.length-1].id+1
     }
-    // console.log(temp)
     const {user,DOB,fullname,mother_name,Postal_code,products,state,city,hobbies}=req.body
-    //  console.log(user,DOB,fullname,mother_name,Postal_code)
     let data=await new Users({
         id,user,DOB,fullname,mother_name,products,hobbies,state,city,Postal_code
     })
@@ -61,8 +59,6 @@ app.post("/details",async (req,res)=>{
 app.get("/find/:id",async(req,res)=>{
     let {id}=req.params
     let one=await Users.findOne({id:id})
-    // console.log(one)
-
     res.send(one)
 })
 
@@ -70,11 +66,8 @@ app.get("/find/:id",async(req,res)=>{
 app.patch("/update/:id",async(req,res)=>{
 
     let {id}=req.params
-    // console.log(iid)
     let {user,DOB,fullname,mother_name,Postal_code,products,state,city,hobbies}=req.body
 
-    // await Users.findOneAndUpdate({id,user:user,DOB:DOB,fullname:fullname,
-    //     mother_name:mother_name,Postal_code:Postal_code,products:products,state:state,city:city,hobbies:hobbies})
     await Users.findOneAndDelete({id})
 
     let data=await new Users({
